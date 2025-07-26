@@ -17,16 +17,26 @@ from flask import Flask, session, request, redirect, url_for, render_template
 
 
 app = Flask(__name__)
-app.secret_key = os.urandom(24)
+app.secret_key = os.environ.get("SECRET_KEY", "fallback-secret")
+
+# app.secret_key = os.urandom(24)
 FILES_DIR = 'files'
 
 DB_CONFIG = {
-    'dbname': 'siesadmin',
-    'user': 'postgres',
-    'password': 'admin',
-    'host': 'localhost',
-    'port': '5432'
+    'dbname': os.environ.get('DB_NAME'),
+    'user': os.environ.get('DB_USER'),
+    'password': os.environ.get('DB_PASSWORD'),
+    'host': os.environ.get('DB_HOST'),
+    'port': os.environ.get('DB_PORT')
 }
+
+# DB_CONFIG = {
+#     'dbname': 'siesadmin',
+#     'user': 'postgres',
+#     'password': 'admin',
+#     'host': 'localhost',
+#     'port': '5432'
+# }
 
 user_credentials = {
     'username': 'a',
