@@ -1,0 +1,1101 @@
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  font-family: Arial, sans-serif;
+  background-color: rgb(253, 246, 240);
+  background-image: url(https://siesgst.edu.in/images/innerheadercommon.jpg);
+  background-repeat: no-repeat;
+}
+
+header {
+  padding: 15px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+}
+
+header img {
+  max-width: 200px;
+  height: auto;
+}
+
+.customLabel {
+  margin: 0;
+  text-align: center;
+  justify-content: center;
+  font-size: 48px;
+  color: #014da1;
+  font-weight: bold;
+}
+
+.main-container {
+  padding: 20px;
+  background-color: #87CEEB;
+  border-radius: 30px 30px 0 0;
+  flex: 1;
+  text-align: center;
+  max-width: 100%; 
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.download {
+  background-color: #0dc110;
+  box-shadow: 2px 2px #039717;
+  border: 2px solid rgb(11, 167, 50);
+  border-radius: 20px;
+  font-size: 15px;
+  padding: 10px 14px 10px 14px;
+  margin-left: 20px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+}
+
+.download:active {
+  box-shadow: none;
+  transform: translate(2px,2px);
+}
+
+.goback {
+  background-color: #e84a26;
+  box-shadow: 2px 2px #8a2408;
+  border: 2px solid rgb(207, 86, 15);
+  border-radius: 20px;
+  font-size: 15px;
+  padding: 10px 14px 10px 14px;
+  margin-right: 20px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+}
+
+/* .admin:active {
+  box-shadow: none;
+  transform: translate(2px,2px);
+} */
+
+.container {
+  padding: 20px;
+  background-color: #87CEEB;
+  border-radius: 30px 30px 0 0;
+  flex: 1;
+  text-align: center;
+  max-width: 100%; 
+}
+
+
+.label,.label1, .read {
+  background-color: #f38423;
+  box-shadow: 3px 3px #b76014;
+  border: 2px solid rgb(231, 134, 16);
+  border-radius: 20px;
+  width: 250px;
+  font-size: 15px;
+  padding: 10px;
+  margin: 10px 30px 0px 30px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  height: auto;
+  position: relative;
+  text-overflow: ellipsis;
+}
+
+.redi {
+  background-color: #f38423;
+  box-shadow: 3px 3px #b76014;
+  border: 3px solid rgb(231, 134, 16);
+  border-radius: 20px;
+  width: 200px; 
+  font-size: 25px; 
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  padding: 10px; 
+  margin: 0px 30px; 
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  height: 200px;
+  position: relative;
+  text-overflow: ellipsis;
+}
+
+.redi:active {
+  box-shadow: none;
+  transform: translate(3px,3px);
+}
+
+.label1:hover::before {
+  content: "Select Timetable Word document";
+  position: absolute;
+  display: flex;
+  top: 0; 
+  left: -87%; 
+  align-items: center;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: bold;
+  border-radius: 15px;
+  font-size: 12px;
+}
+
+.label:hover::before {
+  content: "Select Syllabus Word document";
+  position: absolute;
+  display: flex;
+  top: 0; 
+  left: -85%; 
+  align-items: center;
+  background-color: white;
+  color: black;
+  border: 2px solid black;
+  padding: 8px;
+  font-weight: bold;
+  border-radius: 15px;
+  font-size: 12px;
+}
+
+.label:active, .read:active {
+  box-shadow: none;
+  transform: translate(2px,2px);
+}
+
+.file {
+  display: none;
+  cursor: pointer;
+}
+
+.inputvalues {
+  width: 450px;
+  margin: 0px 10px 0px 10px;
+  border-radius: 10px;
+  border: 2px solid black;
+  padding: 20px;
+}
+
+#searchTableButton {
+  background-color: #014da1;
+  box-shadow: 2px 2px #032897;
+  border: 2px solid rgb(3, 8, 147);
+  border-radius: 20px;
+  font-size: 15px;
+  padding: 10px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+}
+
+#searchTableButton:active {
+  box-shadow: none;
+  transform: translate(2px,2px);
+}
+
+#documentContent {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  width: 100%; 
+  margin: 20px auto;
+}
+
+#documentContent.file-selected {
+  background-color: #DEE2FF;
+  font-size: 15px;
+}
+
+#documentContent td, #documentContent th {
+  border: 3px double black;
+}
+
+.common-input {
+  width: 350px;
+  border-radius: 10px;
+  border: 2px solid black;
+}
+
+.collapsible-title {
+  cursor: pointer;
+  background-color: #ADD8E6;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  padding: 20px;
+  text-align: center;
+  border: 2px solid black;
+  font-weight: bold;
+  border-radius: 10px;
+}
+
+.collapsible-content {
+  display: none;
+}
+
+.collapsible-content.show {
+  display: block;
+  background-color: #ADD8E6;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin-bottom: 40px;
+}
+
+.new-outcomes-container.show {
+  display: block;
+  background-color: #ADD8E6;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.outcomes-container.show {
+  display: block;
+  background-color: #ADD8E6;
+  border: 2px solid black;
+  border-radius: 10px;
+}
+
+.outcomesText {
+  display: none;
+}
+
+.add-icon {
+  float: right;
+  cursor: pointer;
+  font-size: 3.5rem;
+  margin-top: -10px;
+}
+
+.course-input {
+  width: 90%;
+  border-radius: 10px;
+  border: 2px solid black;
+}
+
+.level-input {
+  width: 80%;
+  border-radius: 10px;
+  border: 2px solid black;
+}
+
+.course-outcomes-section {
+  margin-bottom: 20px;
+}
+
+.print-plan {
+  margin-top: 10px;
+  padding: 10px;
+  width: 150px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.print-plan:hover {
+  background-color: #45a049;
+}
+
+#documentContent1 {
+  position: relative;
+  text-align: center;
+  font-size: 20px;
+  width: 100%; 
+  margin: 20px auto;
+}
+
+#documentContent1.file-selected {
+  background-color: #DEE2FF;
+  font-size: 15px;
+}
+
+#documentContent1 td, #documentContent1 th {
+  border: 3px double black;
+}
+
+.print-button {
+  display: none;
+  margin-top: 10px;
+  padding: 8px 16px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.print-button:hover {
+  background-color: #45a049;
+}
+
+.button-group {
+  display: flex;
+  justify-content: center;
+  margin: 40px;
+  gap: 40px;
+}
+
+.button-group .year-select-btn {
+  padding: 10px 20px;
+  border-radius: 10px;
+  width: 150px;
+  font-weight: bold;
+  background-color: rgb(255, 255, 255);
+  cursor: pointer;
+}
+
+.button-group .year-select-btn.selected {
+  background-color: rgb(29, 204, 29);
+  color: white;
+}
+
+.date-label {
+  display: flex;
+  color: black;
+  margin: 0px 20px -2px 30px;
+  font-size: 20px;
+  align-items: flex-start;
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.date-input {
+  background-color: #FFA500;
+  border: 2px solid black;
+  border-radius: 10px;
+  margin: 0px 30px 0px 30px;
+  color: white;
+  width: 250px;
+}
+
+.date-input:focus {
+  background-color: #FFA500;
+  border: 2px solid black;
+}
+
+.form-row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dates-range {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid white;
+  border-radius: 10px;
+  margin: 20px;
+  background-color: #ADD8E6;
+}
+
+.session-label {
+  font-size: 3rem;
+  font-weight: bold;
+  font-family: Verdana, Geneva, Tahoma, sans-serif; 
+}
+
+.date-inputs {
+  display: flex; 
+  justify-content: center;
+  align-items: center;
+  width: 100%; 
+}
+
+
+
+.form-group {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.collapsible {
+  cursor: pointer;
+  padding: 18px;
+  width: 80%;
+  border: none;
+  text-align: left;
+  outline: none;
+  font-size: 15px;
+  margin: 10px auto;
+}
+
+
+#printDates {
+  background-color: #014da1;
+  box-shadow: 3px 3px #012e63;
+  border: 2px solid #03254d;
+  border-radius: 20px;
+  width: 200px;
+  font-size: 15px;
+  padding: 10px;
+  margin: 10px 20px 0px 20px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+}
+
+#printDates:active {
+  box-shadow: none;
+  transform: translate(2px,2px);
+}
+
+#result {
+  display: none;
+  position: relative;
+  border: 2px solid white;
+  background-color: #c0e8f6;
+  margin: 20px;
+  border-radius: 15px;
+  padding: 10px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-size: 20px;
+  align-items: center;
+  text-align: center;
+  color: #000000;
+}
+
+#result table td:first-child {
+  font-size: 20px;
+}
+
+#result input {
+  font-size: 20px;
+  width: 90%;
+  padding: 5px;
+  margin: 10px;
+  border-radius: 10px;
+}
+
+
+.day-selector-container {
+  max-width: 100%;
+  padding: 20px;
+  border: 2px solid white;
+  background-color: #ADD8E6;
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.form-heading {
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+}
+
+.form-check-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center; /* Center the items */
+}
+
+.form-check {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.form-check-input {
+  margin-top: 0;
+  width: 1.2em;
+  height: 1.2em;
+}
+
+#outcomesText {
+  display: none;
+}
+
+/* .admindata {
+  margin-top: 10px;
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
+} */
+
+.head {
+  color: #000;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: block;
+  font-weight: bold;
+  font-size: x-large;
+  margin-top: 1.5em;
+}
+
+.inputBox {
+  position: relative;
+  margin: 20px 15px 25px 10px;
+  width: 250px;
+}
+
+.inputBox input {
+  width: 100%;
+  padding: 10px;
+  outline: none;
+  border: none;
+  color: #000;
+  font-size: 1em;
+  background: transparent;
+  border-left: 2px solid #000;
+  border-bottom: 2px solid #000;
+  transition: 0.1s;
+  border-bottom-left-radius: 8px;
+}
+
+.inputBox span,
+.inputBox1 span {
+  margin-top: 5px;
+  position: absolute;
+  left: 0;
+  transform: translateY(-4px);
+  margin-left: 10px;
+  padding: 10px;
+  pointer-events: none;
+  font-size: 12px;
+  color: #000;
+  text-transform: uppercase;
+  transition: 0.5s;
+  letter-spacing: 3px;
+  border-radius: 8px;
+}
+
+.inputBox input:valid~span,
+.inputBox input:focus~span {
+  transform: translateX(113px) translateY(-15px);
+  font-size: 0.8em;
+  padding: 5px 10px;
+  background: #000;
+  letter-spacing: 0.2em;
+  color: #fff;
+  border: 2px;
+}
+
+.inputBox1 input:valid~span,
+.inputBox1 input:focus~span {
+  transform: translateX(156px) translateY(-15px);
+  font-size: 0.8em;
+  padding: 5px 10px;
+  background: #000;
+  letter-spacing: 0.2em;
+  color: #fff;
+  border: 2px;
+}
+
+.inputBox input:valid,
+.inputBox input:focus,
+.inputBox1 input:valid,
+.inputBox1 input:focus {
+  border: 2px solid #000;
+  border-radius: 8px;
+}
+
+.enter {
+  height: 45px;
+  width: 100px;
+  border-radius: 5px;
+  gap: 35px;
+  border: 2px solid #000;
+  cursor: pointer;
+  background-color: transparent;
+  transition: 0.5s;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 3em;
+}
+
+.enter:hover {
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+
+/* .close {
+  color: #868686;
+  float: right;
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+} */
+.popup-close {
+  color: #868686;
+  float: right;
+  font-size: 30px;
+  padding: 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.popup-close:hover {
+  color: red;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* 
+#fileLabel {
+  background-color: #f75e26;
+  box-shadow: 3px 3px #c9330d;
+  border: 2px solid rgb(231, 63, 16);
+  border-radius: 20px;
+  width: 250px;
+  font-size: 15px;
+  padding: 10px;
+  margin: 10px 30px 0px 30px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+  height: auto;
+  text-overflow: ellipsis;
+}
+
+#updateAndDownloadButton {
+  background-color: #f75e26;
+  box-shadow: 3px 3px #c9330d;
+  border: 2px solid rgb(231, 63, 16);
+  border-radius: 20px;
+  width: 200px;
+  font-size: 15px;
+  padding: 10px;
+  margin: 10px 20px 0px 20px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+} */
+
+
+
+@media (min-width: 576px) and (max-width: 1200px) {
+  header img {
+      max-width: 140px;
+  }
+
+  .customLabel {
+      font-size: 26px;
+      font-weight: bold;
+  }
+}
+
+
+@media (min-width: 1200px) and (max-width: 1400px) {
+
+  #result td {
+      max-width: none;
+      padding: 5px;
+  }
+
+  #result input {
+      width: 100%;
+      margin: 10px auto;
+      box-sizing: border-box;
+  }
+
+}
+
+@media (min-width: 1401px) {
+  #result table {
+      width: 100%;
+  }
+}
+
+
+
+
+/* formatting */
+.custom-excel-input {
+  position: relative;
+  display: inline-block;
+}
+
+#excelFile {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.custom-button {
+  background: #4CAF50;
+  box-shadow: 3px 3px #204921;
+  border: 2px solid #1e4720;
+  border-radius: 20px;
+  width: 200px;
+  font-size: 15px;
+  padding: 10px;
+  margin: 10px 20px 0px 20px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+}
+/* formatting */
+
+
+.admin {
+  background-color: #e84a26;
+  box-shadow: 3px 3px #8a2408;
+  border: 2px solid rgb(207, 86, 15);
+  border-radius: 20px;
+  font-size: 15px;
+  padding: 10px 14px 10px 14px;
+  margin-right: 20px;
+  color: white;
+  text-align: center;
+  outline: none;
+  cursor: pointer;
+}
+
+.admin:active {
+  box-shadow: none;
+  transform: translate(3px,3px);
+}
+
+.popup {
+  display: none;
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: auto;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.4);
+}
+
+.popup-content {
+  min-height: 350px;
+  width: 350px;
+  flex-direction: column;
+  gap: 35px;
+  border-radius: 15px;
+  background: white;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+}
+
+#outcomesText {
+  display: none;
+}
+
+.admindata {
+  margin-top: 10px;
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
+}
+
+.head {
+  color: #000;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  display: block;
+  font-weight: bold;
+  font-size: x-large;
+  margin-top: 1.5em;
+}
+
+.inputBox {
+  position: relative;
+  margin: 20px 15px 25px 10px;
+  width: 250px;
+}
+
+.inputBox input {
+  width: 100%;
+  padding: 10px;
+  outline: none;
+  border: none;
+  color: #000;
+  font-size: 1em;
+  background: transparent;
+  border-left: 2px solid #000;
+  border-bottom: 2px solid #000;
+  transition: 0.1s;
+  border-bottom-left-radius: 8px;
+}
+
+.inputBox span,
+.inputBox1 span {
+  margin-top: 5px;
+  position: absolute;
+  left: 0;
+  transform: translateY(-4px);
+  margin-left: 10px;
+  padding: 10px;
+  pointer-events: none;
+  font-size: 12px;
+  color: #000;
+  text-transform: uppercase;
+  transition: 0.5s;
+  letter-spacing: 3px;
+  border-radius: 8px;
+}
+
+.inputBox input:valid~span,
+.inputBox input:focus~span {
+  transform: translateX(113px) translateY(-15px);
+  font-size: 0.8em;
+  padding: 5px 10px;
+  background: #000;
+  letter-spacing: 0.2em;
+  color: #fff;
+  border: 2px;
+}
+
+.inputBox1 input:valid~span,
+.inputBox1 input:focus~span {
+  transform: translateX(156px) translateY(-15px);
+  font-size: 0.8em;
+  padding: 5px 10px;
+  background: #000;
+  letter-spacing: 0.2em;
+  color: #fff;
+  border: 2px;
+}
+
+.inputBox input:valid,
+.inputBox input:focus,
+.inputBox1 input:valid,
+.inputBox1 input:focus {
+  border: 2px solid #000;
+  border-radius: 8px;
+}
+
+.enter {
+  height: 45px;
+  width: 100px;
+  border-radius: 5px;
+  gap: 35px;
+  border: 2px solid #000;
+  cursor: pointer;
+  background-color: transparent;
+  transition: 0.5s;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 2px;
+  margin-bottom: 3em;
+}
+
+.enter:hover {
+  background-color: rgb(0, 0, 0);
+  color: white;
+}
+
+
+.admindata {
+  margin-top: 10px;
+  padding: 10px;
+  margin: 10px 10px 10px 10px;
+}
+
+
+@media (max-width: 576px) {
+  header img {
+      max-width: 100%;
+  }
+
+  .customLabel {
+      font-size: 15px;
+  }
+
+  .main-container {
+    padding: 10px 0px 20px 0px;
+  }
+
+  .session-label {
+    font-size: 2rem;
+  }
+
+  .redi {
+    width: 150px; 
+    font-size: 18px; 
+    padding: 8px; 
+    height: 150px; 
+    margin: 0px 10px; 
+  }
+
+  .download,
+  .admin,.goback {
+    font-size: 14px;
+    padding: 8px 12px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .collapsible-title {
+    font-size: 1.5rem;
+  }
+
+  .collapsible-content.show  {
+    padding: 5px;
+  }
+
+  #fileInputLabel,
+  #readDocumentButton {
+      width: 200px;
+      margin: 10px 0 0;
+  }
+
+  .course-input {
+    font-size: 10px;
+  }
+
+  .level-input {
+    font-size: 12px;
+    padding: 5px;
+  }
+
+  #result {
+      padding: 10px 10px 10px 10px;
+      font-size: 15px;
+  }
+
+  #result h4 {
+    font-size: 20px;
+  }
+
+  .details {
+      width: auto;
+  }
+
+  .add-icon {
+    font-size: 2.2rem;
+  }
+
+  #fileLabel {
+      width: 200px;
+      margin: 10px 0 0;
+  }
+
+
+  .common-input {
+    width: 250px;
+    font-size: 12px;
+  }
+
+  .popup {
+    align-items: center;
+    height: 100%;
+  }
+
+  .popup-content {
+    width: 300px;
+    height: auto;
+  }
+
+  .inputBox {
+    width: 220px;
+    margin-left: 0;
+  }
+  
+  .form-group {
+    margin-bottom: 0;
+    flex: 1 1 100%;
+  }
+
+  .form-check-container {
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .form-check {
+      width: 100%;
+  }
+
+  .form-check-label {
+      margin-left: 10px;
+      font-size: 1rem;
+  }
+
+  .course-outcomes-container {
+    overflow-x: scroll; /* Allow horizontal scrolling */
+    white-space: nowrap; /* Prevent wrapping */
+    max-width: 100%; /* Ensure full width */
+  }
+
+  .new-outcomes-container.show {
+    width: 200%; 
+    display: flex;
+  }
+
+  .table {
+    width: 100%; 
+    overflow-x: scroll;
+  }
+
+  .table th,
+  .table td {
+    min-width: 20px;
+  }
+
+  .form-control {
+    width: 100%; 
+    margin: 0;
+    font-size: 12px;
+  }
+
+  .print-button {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+
+  .level-input {
+    margin: 0 10px 15px 10px;
+    width: 250px;
+    font-size: 12px;
+  }
+
+  .form-heading {
+    font-size: 20px;
+  }
+
+  .day-selector-container {
+    margin: 20px;
+  }
+
+  .dates-range {
+    margin: 20px;
+  }
+
+  .date-inputs {
+    justify-content: space-between;
+    padding: 8px;
+  }
+
+  .date-label {
+    font-size: 18px;
+  }
+
+  .button-group {
+    margin: 20px;
+  }
+
+}

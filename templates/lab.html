@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="text/css" href="https://siesgst.edu.in/images/logo_50x50.png">
+    <title>SIES | GST</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+
+<div class="container-fluid">
+    <div class="row">
+        <header class="col">
+            <div>
+                <img src="static/images/sies_gst_logo.jpg" alt="Logo">
+            </div>
+            <div class="mx-auto">
+                <span class="customLabel">SIES GRADUATE SCHOOL OF TECHNOLOGY</span>
+            </div>
+        </header>
+    </div>
+</div>
+
+
+<!-- Main Container -->
+    <div class="main-container pt-3">
+        <div class="button-container">
+            <a href="/static/documents/Lab_template.xlsx" download>
+                <button class="download">
+                    Download Template
+                </button>
+            </a>
+            <button onclick="window.location.href = '/'" class="goback">
+                <i class="fas fa-arrow-circle-left"></i> Back
+            </button>
+        </div>
+        
+
+
+        <div id="loginPopup" class="popup">
+            <div class="popup-content">
+                <span class="close" onclick="hideLoginPopup()">&times;</span>
+                <a class="head">Admin Login</a>
+                <form action="/login" class="admindata" method="post" onsubmit="return validateLogin()">
+                    <div class="inputBox">
+                        <label class="d-none" for="usernameInput">Username</label>
+                        <input type="text" id="usernameInput" name="username" required>
+                        <span>Username</span>
+                    </div>                    
+                    <div class="inputBox">
+                        <label class="d-none" for="password">Password:</label>
+                        <input type="password" id="password" name="password" required="required">
+                        <span>Password</span>
+                    </div>
+                    <button class="enter">LOGIN</button>
+                </form>
+            </div>
+        </div>
+
+
+
+        
+        <div class="container">
+            <h1 class="collapsible-title" onclick="toggleInputs()">Course Plan</h1>
+        
+            <div class="collapsible-content">
+                <div class="form-row mt-4"> 
+                    <!-- Row 1 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input1" placeholder="Semester">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input2" placeholder="Year">
+                    </div>
+        
+                    <!-- Row 2 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input3" placeholder="Course Title">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input4" placeholder="Course Code">
+                    </div>
+        
+                    <!-- Row 3 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input5" placeholder="Total Contact Hours">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input6" placeholder="Duration of TEE">
+                    </div>
+        
+                    <!-- Row 4 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input7" placeholder="TEE Marks">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input8" placeholder="IA Marks">
+                    </div>
+        
+                    <!-- Row 5 -->
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input9" placeholder="Subject In-charge">
+                    </div>
+                    <div class="form-group col-6 mt-2">
+                        <input type="text" class="form-control common-input" id="input10" placeholder="Course Coordinator">
+                    </div>
+
+                    <div class="form-group col-12 mt-2">
+                        <select id="input11" class="form-control common-input">
+                            <option value="Humanities and Applied Sciences">First Year</option>
+                            <option value="Artificial Intelligence & Data Science">AIDS</option>
+                            <option value="Artificial Intelligence & Machine Learning">AIML</option>
+                            <option value="Computer Engineering">CE</option>                            
+                            <option value="Electronic & Computer Science">ECS</option>
+                            <option value="Electronic and telecommunication Engineering">EXTC</option>
+                            <option value="Computer Science & Engineering(IOT/Cyber security/block chain technology)">IOT</option>
+                            <option value="Information Technology">IT</option>
+                            <option value="Mechanical Engineering">Mech</option>
+                        </select>
+                    </div>
+                    <!-- Row 6 -->
+                    <div class="form-group col-12 mt-2">
+                        <button class="print-plan" onclick="collectAndStoreInputs()">Submit</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        
+
+            <div class="container">
+                <h1 class="collapsible-title" onclick="toggleOutcomes()">
+                    Course Outcomes 
+                    <span class="add-icon" onclick="addOutcome()">+</span>
+                </h1>
+                <div class="outcomes-container">
+                    <div class="form-row mt-2">
+                        <div class="form-group col-12">
+                            <span id="outcomesText" style="display: none;">Add Course Outcomes</span>
+                        </div>
+                        <button class="print-button" onclick="printOutcomes()">Submit</button>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+    <div class="container">
+        <h1 class="collapsible-title" onclick="toggleOutcomeTableVisibility()">Course Articulation Matrix</h1>
+        <div class="course-outcomes-container">
+            <div class="form-row mt-2">
+                <div class="form-group col-12">
+                    <div id="courseOutcomesContainer" class="new-outcomes-container show">
+                        <script>
+                            function createOutcomeTable(outcomes) {
+                                if (!outcomes || outcomes.length === undefined) {
+                                    console.error('Invalid outcomes array:', outcomes);
+                                    return;
+                                }
+
+                                var container = document.getElementById('courseOutcomesContainer');
+                                container.innerHTML = '';
+                                var table = document.createElement('table');
+                                table.classList.add('table'); 
+                                var headerRow = table.insertRow(0);
+                                headerRow.insertCell(0).textContent = 'Serial Number';
+                                headerRow.insertCell(1).textContent = 'Outcome Description';
+                                for (var i = 2; i < 16; i++) {
+                                    var columnName;
+                                    if (i >= 2 && i <= 13) {
+                                        columnName = (i - 1).toString();
+                                    } else if (i === 14) {
+                                        columnName = 'PS O1';
+                                    } else if (i === 15) {
+                                        columnName = 'PS O2';
+                                    }
+                                    headerRow.insertCell(i).textContent = columnName;
+                                }
+
+                                var numberOfOutcomes = outcomes.length;
+                                for (var row = 1; row <= numberOfOutcomes; row++) {
+                                    var outcomeRow = table.insertRow(row);
+                                    outcomeRow.insertCell(0).textContent = row;
+                                    outcomeRow.insertCell(1).textContent = outcomes[row - 1];
+                                    for (var col = 2; col < 16; col++) {
+                                        var inputCell = outcomeRow.insertCell(col);
+                                        var inputField = document.createElement('input');
+                                        inputField.type = 'text';
+                                        inputField.classList.add('form-control');
+                                        inputCell.appendChild(inputField);
+                                    }
+                                }
+                                container.appendChild(table);
+                            }
+
+                            
+                            createOutcomeTable();
+
+
+                            document.addEventListener('DOMContentLoaded', function() {
+                                toggleOutcomeTableVisibility();
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+        
+    
+        <div class="file-input-container">
+                <input type="file" id="wordFileInput1" accept=".docx" class="d-none file" onchange="updateFileNames()">
+                <label for="wordFileInput1" id="fileInputLabel1" class="label">Choose File</label>  
+                <button id="readDocumentButton1" class="read" onclick="readWordDocumentsforlab()">Read Document</button>
+        </div>
+    
+        <div id="documentContent1"></div>
+  
+
+        <div class="button-group mt-5">
+            <button id="feButton" class="year-select-btn" onclick="selectYear('FE')">FE</button>
+            <button id="seButton" class="year-select-btn" onclick="selectYear('SE')">SE/TE/BE</button>
+        </div>
+
+        <div class="day-selector-container mt-3">
+            <!-- Batch Number Section -->
+            <div class="form-section"> <!-- Added margin-bottom for spacing -->
+                <h4 class="form-heading">Enter the Batch Number</h4>
+                <div class="form-row mt-2">
+                    <div class="form-group col-12 col-md-4 mt-2">
+                        <input type="text" class="form-control common-input" id="batch1" placeholder="Batch-1">
+                    </div>
+                    <div class="form-group col-12 col-md-4 mt-2">
+                        <input type="text" class="form-control common-input" id="batch2" placeholder="Batch-2">
+                    </div>
+                    <div class="form-group col-12 col-md-4 mt-2">
+                        <input type="text" class="form-control common-input" id="batch3" placeholder="Batch-3">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="day-selector-container mt-3">
+            <!-- Days Selection Section -->
+            <div class="form-section"> <!-- Added margin-bottom for spacing -->
+                <h4 class="form-heading">Select Respective Days for Each Batch</h4>
+                <div class="form-row mt-2">
+                    <div class="form-group col-12 col-md-4 mt-2">
+                        <select id="weekdays1" class="form-control common-input">
+                            <option value="">--Select Day of the Week--</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-12 col-md-4 mt-2">
+                        <select id="weekdays2" class="form-control common-input">
+                            <option value="">--Select Day of the Week--</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-12 col-md-4 mt-2">
+                        <select id="weekdays3" class="form-control common-input">
+                            <option value="">--Select Day of the Week--</option>
+                            <option value="Monday">Monday</option>
+                            <option value="Tuesday">Tuesday</option>
+                            <option value="Wednesday">Wednesday</option>
+                            <option value="Thursday">Thursday</option>
+                            <option value="Friday">Friday</option>
+                            <option value="Saturday">Saturday</option>
+                            <option value="Sunday">Sunday</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form>
+            <div class="form-row dates-range">
+                <h3 class="form-heading mt-3 mb-2">Session</h3>
+                <div class="date-inputs">
+                    <div class="custom-form-group mb-4">
+                        <label for="startDate" class="date-label">Start Date:</label>
+                        <input type="date" class="form-control form-control-md date-input" id="startDate">
+                    </div>
+                    <div class="custom-form-group mb-4">
+                        <label for="endDate" class="date-label">End Date:</label>
+                        <input type="date" class="form-control form-control-md date-input" id="endDate">
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- IA -->
+
+            <!-- <div class="form-row" style="padding-right: 40px;">
+                <label style="justify-content: center; font-size: 30px; padding-top: 20px;padding-right: 80px;">IA1</label>
+                <div class="custom-form-group mt-4 mb-3">
+                    <label for="startDate" class="date-label">From:</label>
+                    <input type="date" class="form-control form-control-md date-input" id="startDate1">
+                </div>
+                <div class="custom-form-group mt-4 mb-3">
+                    <label for="endDate" class="date-label">To:</label>
+                    <input type="date" class="form-control form-control-md date-input" id="endDate1">
+                </div>
+            </div>
+
+            <div class="form-row" style="padding-right: 40px;">
+                <label style="justify-content: center; font-size: 30px; padding-top: 20px; padding-right: 80px;">IA2</label>
+                <div class="custom-form-group mt-4 mb-3">
+                    <label for="startDate" class="date-label">From:</label>
+                    <input type="date" class="form-control form-control-md date-input" id="startDate2">
+                </div>
+                <div class="custom-form-group mt-4 mb-3">
+                    <label for="endDate" class="date-label">To:</label>
+                    <input type="date" class="form-control form-control-md date-input" id="endDate2">
+                </div>
+            </div> -->
+
+                <!-- IA -->
+            <!-- <div class="form-group mt-4">
+                <input type="text" class="form-control mb-2 inputvalues" id="ignoreDates" aria-label="Ignore Dates"
+                    placeholder="Event days (DD-MM-YYYY,DD-MM-YYYY)">
+            </div> -->
+        </form>
+
+        <div>
+            <button  id="printDates" onclick="printDateslab()">Print Dates</button>
+        </div>
+
+
+        <div id="result" class="mt-5"></div>
+
+
+
+        <div class="text-center mt-4">
+                <input type="file" id="excelFile" accept=".xlsx" class="hidden" onchange="updateAndDownloadlab()">
+                <label for="excelFile" id="excelInputLabel" class="custom-button">Upload Excel File</label>
+        </div>
+
+
+        
+    </div>
+
+    
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>

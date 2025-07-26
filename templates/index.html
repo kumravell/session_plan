@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="text/css" href="static\images\logo.jpg">
+    <title>SIES | GST</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</head>
+<body>
+
+
+
+<!-- admin     -->
+<div class="container-fluid">
+    <div class="row">
+        <header class="col">
+            <div>
+                <img src="static/images/sies_gst_logo.jpg" alt="Logo">
+            </div>
+            <div class="mx-auto">
+                <span class="customLabel">SIES GRADUATE SCHOOL OF TECHNOLOGY</span>
+            </div>
+        </header>
+    </div>
+</div>
+
+<div class="container pt-3">
+    <div class="button-container">
+        <button onclick="showLoginPopup()" class="admin">Admin Login</button>  
+    </div>
+
+    
+    <div id="loginPopup" class="popup">
+        <div class="popup-content">
+            <span class="popup-close" onclick="hideLoginPopup()">&times;</span>
+            <a class="head">Admin Login</a>
+            <form action="/login" class="admindata" method="post" onsubmit="return validateLogin()">
+                <div class="inputBox">
+                    <label class="d-none" for="usernameInput">Username</label>
+                    <input type="text" id="usernameInput" name="username" required>
+                    <span>Username</span>
+                </div>                    
+                <div class="inputBox">
+                    <label class="d-none" for="password">Password:</label>
+                    <input type="password" id="password" name="password" required="required">
+                    <span>Password</span>
+                </div>
+                <button class="enter">LOGIN</button>
+            </form>
+        </div>
+    </div>
+<!-- admin -->
+
+<!-- 
+<div id="loginPopup" class="popup">
+    <div class="popup-content">
+        <span class="popup-close" onclick="hideLoginPopup()">&times;</span>
+        <a class="head">Admin Login</a>
+        <form action="/login" class="admindata" method="post" onsubmit="return validateLogin()">
+            <div class="inputBox">
+                <label class="d-none" for="usernameInput">Username</label>
+                <input type="text" id="usernameInput" name="username" required>
+                <span>Username</span>
+            </div>                    
+            <div class="inputBox">
+                <label class="d-none" for="password">Password:</label>
+                <input type="password" id="password" name="password" required="required">
+                <span>Password</span>
+            </div>
+            <button class="enter">LOGIN</button>
+        </form>
+    </div>
+</div> -->
+
+<!-- Main Container -->
+    <!-- <div class="main-container pt-3 text-center">
+         
+        <h1 class="mb-4">Session Plan</h1>
+        <div class="file-input-container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-6 mb-3"> 
+                    <button id="redirect1" class="redi" onclick="window.location.href = '/regular'">Theory</button>
+                </div>
+                <div class="col-12 col-md-6 mb-3">
+                    <button id="redirect2" class="redi" onclick="window.location.href = '/lab'">Lab</button>
+                </div>
+            </div>
+                <button id="redirect1" class="redi" onclick="window.location.href = '/regular'">Theory</button>
+                <button id="redirect2" class="redi" onclick="window.location.href = '/lab'">Lab</button>
+        </div>
+    
+    </div> -->
+    <div class="main-container text-center mt-3">
+        <h1 class="session-label mb-4">Session Plan</h1> <!-- Main heading -->
+        <div class="d-flex flex-column flex-md-row justify-content-center"> <!-- Added flex-column for mobile view -->
+            <div class="mb-4"> <!-- Margin bottom for spacing on mobile -->
+                <button id="redirect1" class="redi" onclick="window.location.href = '/regular'">Theory</button>
+            </div>
+            <div>
+                <button id="redirect2" class="redi" onclick="window.location.href = '/lab'">Lab</button>
+            </div>
+        </div>
+    </div>
+
+  
+    <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script>
+
+
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
+</html>
