@@ -39,8 +39,8 @@ DB_CONFIG = {
 # }
 
 user_credentials = {
-    'username': 'a',
-    'password': 'a'
+    'username': 'siesadmin',
+    'password': 'sies400706'
 }
 
 
