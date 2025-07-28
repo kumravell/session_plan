@@ -168,23 +168,21 @@ from datetime import datetime
 @app.route('/get_filtered_dates', methods=['POST'])
 def get_filtered_dates():
     data = request.get_json()
-    year = data.get('year')  # Get user input (FE, SE, TE, BE)
+    year = data.get('year')
     semi_final_dates = data.get('semiFinalDates', [])
 
-    # Debugging output
-    # print(f"Year: {year}, Semi-Filtered Dates: {semi_final_dates}")
+    # ✅ Avoid empty tuple in SQL
+    if not semi_final_dates:
+        return jsonify({"filteredDates": []})
 
-    # Convert semi-final dates to YYYY-MM-DD format
     semi_final_dates_converted = []
     for date in semi_final_dates:
         try:
-            # Convert from DD/MM/YYYY to YYYY-MM-DD
             converted_date = datetime.strptime(date, '%d/%m/%Y').strftime('%Y-%m-%d')
             semi_final_dates_converted.append(converted_date)
         except ValueError:
-            print(f"Invalid date format for: {date}")
+            continue
 
-    # Determine which tables to check for holidays
     tables_to_check = []
     if year in ['SE', 'TE', 'BE']:
         tables_to_check = ['general_holidays', 'se_te_be']
@@ -193,31 +191,25 @@ def get_filtered_dates():
     else:
         return jsonify({"error": "Invalid Year. Please enter FE, SE, TE, or BE."}), 400
 
-    # Fetch existing holidays from the database
-    existing_holidays = set()  # Use a set for faster lookups
+    existing_holidays = set()
+
     try:
         connection = psycopg2.connect(**DB_CONFIG)
         cursor = connection.cursor()
 
         for table in tables_to_check:
-            cursor.execute(f"SELECT dates FROM {table} WHERE dates IN %s", (tuple(semi_final_dates_converted),))
-            rows = cursor.fetchall()
-            existing_holidays.update([row[0].strftime('%Y-%m-%d') for row in rows])  # Convert to string format
+            if semi_final_dates_converted:  # ✅ double check here too
+                query = f"SELECT dates FROM {table} WHERE dates IN %s"
+                cursor.execute(query, (tuple(semi_final_dates_converted),))
+                rows = cursor.fetchall()
+                existing_holidays.update([row[0].strftime('%Y-%m-%d') for row in rows])
 
         cursor.close()
         connection.close()
 
-        # Debugging: Print existing holidays found in the database
-        # print(f"Existing Holidays: {existing_holidays}")
-
-        # Filter out existing holidays from the semi-final dates
-        filtered_dates = [date for date in semi_final_dates_converted if date not in existing_holidays]
-
-        # Debugging: Print filtered dates
-        # print(f"Filtered Dates: {filtered_dates}")
-
+        filtered_dates = [d for d in semi_final_dates_converted if d not in existing_holidays]
         return jsonify({"filteredDates": filtered_dates})
-    
+
     except psycopg2.Error as err:
         return jsonify({"error": str(err)}), 500
 
