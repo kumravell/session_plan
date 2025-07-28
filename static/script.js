@@ -530,6 +530,7 @@ var dates3 = [];
             resultDiv.innerHTML += `<h4>${group.batchName} (${group.weekday})</h4><ul>`;
             group.dates.forEach(date => {
                 resultDiv.innerHTML += `<li>${date}</li>`;
+                console.log('looping');
             });
             resultDiv.innerHTML += '</ul>';
         }
