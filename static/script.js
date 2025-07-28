@@ -477,38 +477,37 @@ console.log("Calling fetchAndFilterDatabaseDatesLab for batch3:", weekdays3, bat
 
     }
     
-  async function fetchAndFilterDatabaseDatesLab(dates, maxDates, weekday, batchName) {
+ async function fetchAndFilterDatabaseDatesLab(dates, maxDates, weekday, batchName) {
     const resultDiv = document.getElementById('result');
 
     try {
         const response = await fetch('/get_filtered_dates', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 year: document.querySelector('.year-select-btn.active')?.textContent || 'FE',
                 semiFinalDates: dates
             })
         });
 
-        const data = await response.json();
-        const filteredDates = data.filteredDates || [];
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
 
-        // ✅ Print to console for debugging
-        console.log(`Filtered Dates for ${batchName} (${weekday}):`, filteredDates);
+        const data = await response.json();  // <--- data is defined here
 
+        console.log(`Filtered Dates for ${batchName} (${weekday}):`, data.filteredDates || []);
+
+        // Render the filtered dates in the result div
         resultDiv.innerHTML += `<h4>${batchName} (${weekday})</h4><ul>`;
-        for (let i = 0; i < Math.min(filteredDates.length, maxDates); i++) {
-            resultDiv.innerHTML += `<li>${filteredDates[i]}</li>`;
+        for (let i = 0; i < Math.min(data.filteredDates.length, maxDates); i++) {
+            resultDiv.innerHTML += `<li>${data.filteredDates[i]}</li>`;
         }
         resultDiv.innerHTML += `</ul>`;
     } catch (error) {
-        console.error(`Error fetching dates for ${batchName}:`, error);
-        resultDiv.innerHTML += `<p style="color:red;">Error fetching dates: ${error.message}</p>`;
+        console.error(`Error in fetchAndFilterDatabaseDatesLab for ${batchName}:`, error);
+        resultDiv.innerHTML += `<p style="color:red;">Error fetching dates for ${batchName}: ${error.message}</p>`;
     }
-      // Inside fetchAndFilterDatabaseDatesLab()
-console.log(`Filtered Dates for ${batchName} (${weekday}):`, data.filteredDates || []);
 }
 
   
