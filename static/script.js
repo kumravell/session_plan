@@ -479,7 +479,6 @@ console.log("Calling fetchAndFilterDatabaseDatesLab for batch3:", weekdays3, bat
     
  async function fetchAndFilterDatabaseDatesLab(dates, maxDates, weekday, batchName) {
     const resultDiv = document.getElementById('result');
-
     try {
         const response = await fetch('/get_filtered_dates', {
             method: 'POST',
@@ -489,23 +488,19 @@ console.log("Calling fetchAndFilterDatabaseDatesLab for batch3:", weekdays3, bat
                 semiFinalDates: dates
             })
         });
+        const data = await response.json();
 
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
+        console.log(`Filtered Dates for ${batchName} (${weekday}):`, data.filteredDates);
 
-        const data = await response.json();  // <--- data is defined here
-
-        console.log(`Filtered Dates for ${batchName} (${weekday}):`, data.filteredDates || []);
-
-        // Render the filtered dates in the result div
+        // Append results to #result div
         resultDiv.innerHTML += `<h4>${batchName} (${weekday})</h4><ul>`;
         for (let i = 0; i < Math.min(data.filteredDates.length, maxDates); i++) {
             resultDiv.innerHTML += `<li>${data.filteredDates[i]}</li>`;
         }
-        resultDiv.innerHTML += `</ul>`;
+        resultDiv.innerHTML += '</ul>';
+
     } catch (error) {
-        console.error(`Error in fetchAndFilterDatabaseDatesLab for ${batchName}:`, error);
+        console.error(error);
         resultDiv.innerHTML += `<p style="color:red;">Error fetching dates for ${batchName}: ${error.message}</p>`;
     }
 }
