@@ -408,6 +408,7 @@ var dates3 = [];
     
 
     async function printDateslab() {
+        
         var resultDiv = document.getElementById('result');
         var startDateInput = document.getElementById("startDate");
         var endDateInput = document.getElementById("endDate");
@@ -463,6 +464,17 @@ var dates3 = [];
         await fetchAndFilterDatabaseDatesLab(dates1, maxDates, weekdays1, batch1);
         await fetchAndFilterDatabaseDatesLab(dates2, maxDates, weekdays2, batch2);
         await fetchAndFilterDatabaseDatesLab(dates3, maxDates, weekdays3, batch3);
+        // In printDateslab()
+console.log("printDateslab() started");
+console.log("Dates collected for batch1:", dates1);
+console.log("Dates collected for batch2:", dates2);
+console.log("Dates collected for batch3:", dates3);
+console.log("Calling fetchAndFilterDatabaseDatesLab for batch1:", weekdays1, batch1, dates1);
+console.log("Calling fetchAndFilterDatabaseDatesLab for batch2:", weekdays2, batch2, dates2);
+console.log("Calling fetchAndFilterDatabaseDatesLab for batch3:", weekdays3, batch3, dates3);
+
+
+
     }
     
   async function fetchAndFilterDatabaseDatesLab(dates, maxDates, weekday, batchName) {
@@ -495,6 +507,8 @@ var dates3 = [];
         console.error(`Error fetching dates for ${batchName}:`, error);
         resultDiv.innerHTML += `<p style="color:red;">Error fetching dates: ${error.message}</p>`;
     }
+      // Inside fetchAndFilterDatabaseDatesLab()
+console.log(`Filtered Dates for ${batchName} (${weekday}):`, data.filteredDates || []);
 }
 
   
