@@ -409,6 +409,7 @@ var dates3 = [];
 
  async function printDateslab() {
     const resultDiv = document.getElementById('result');
+     resultDiv.style.display = 'block'; // ✅ force show the div
     resultDiv.innerHTML = ''; // Clear previous output
 
     const startDateInput = document.getElementById("startDate");
@@ -530,7 +531,7 @@ var dates3 = [];
             resultDiv.innerHTML += `<h4>${group.batchName} (${group.weekday})</h4><ul>`;
             group.dates.forEach(date => {
                 resultDiv.innerHTML += `<li>${date}</li>`;
-                console.log('looping');
+               
             });
             resultDiv.innerHTML += '</ul>';
         }
