@@ -465,7 +465,7 @@ var dates3 = [];
         await fetchAndFilterDatabaseDatesLab(dates3, maxDates, weekdays3, batch3);
     }
     
-    async function fetchAndFilterDatabaseDatesLab(dates, maxDates, weekday, batchName) {
+  async function fetchAndFilterDatabaseDatesLab(dates, maxDates, weekday, batchName) {
     const resultDiv = document.getElementById('result');
 
     try {
@@ -483,12 +483,16 @@ var dates3 = [];
         const data = await response.json();
         const filteredDates = data.filteredDates || [];
 
+        // ✅ Print to console for debugging
+        console.log(`Filtered Dates for ${batchName} (${weekday}):`, filteredDates);
+
         resultDiv.innerHTML += `<h4>${batchName} (${weekday})</h4><ul>`;
         for (let i = 0; i < Math.min(filteredDates.length, maxDates); i++) {
             resultDiv.innerHTML += `<li>${filteredDates[i]}</li>`;
         }
         resultDiv.innerHTML += `</ul>`;
     } catch (error) {
+        console.error(`Error fetching dates for ${batchName}:`, error);
         resultDiv.innerHTML += `<p style="color:red;">Error fetching dates: ${error.message}</p>`;
     }
 }
