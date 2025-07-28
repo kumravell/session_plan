@@ -407,76 +407,120 @@ var dates3 = [];
     }
     
 
-    async function printDateslab() {
-        
-        var resultDiv = document.getElementById('result');
-        var startDateInput = document.getElementById("startDate");
-        var endDateInput = document.getElementById("endDate");
-        var maxDates = parseInt(document.getElementById('input5').value, 10); // User-defined limit
-    
-        var weekdays1 = document.getElementById("weekdays1").value;
-        var weekdays2 = document.getElementById("weekdays2").value;
-        var weekdays3 = document.getElementById("weekdays3").value;
-    
-        var batch1 = document.getElementById("batch1").value.trim();
-        var batch2 = document.getElementById("batch2").value.trim();
-        var batch3 = document.getElementById("batch3").value.trim();
-    
-        if (!resultVisible) {
-            resultDiv.style.display = 'block';
-            resultVisible = true;
-        }
-    
-        resultDiv.innerHTML = "";
-    
-        var startDate = new Date(startDateInput.value);
-        var endDate = new Date(endDateInput.value);
-    
-        if (isNaN(startDate) || isNaN(endDate)) {
-            resultDiv.innerHTML = "<p>Error: Please provide valid start and end dates.</p>";
-            return;
-        }
-    
-        function collectAllDates(dayOfWeek) {
-            var datesArray = [];
-            var currentDate = new Date(startDate);
-    
-            while (currentDate <= endDate) {
-                if (currentDate.getDay() === dayOfWeek) {
-                    datesArray.push(currentDate.toLocaleDateString('en-GB', {
-                        year: 'numeric', month: 'numeric', day: 'numeric'
-                    }));
-                }
-                currentDate.setDate(currentDate.getDate() + 1);
-            }
-            return datesArray;
-        }
-    
-        var dates1 = collectAllDates(getDayNumber(weekdays1));
-        var dates2 = collectAllDates(getDayNumber(weekdays2));
-        var dates3 = collectAllDates(getDayNumber(weekdays3));
-    
-        // console.log("Collected dates for " + weekdays1 + ":", dates1);
-        // console.log("Collected dates for " + weekdays2 + ":", dates2);
-        // console.log("Collected dates for " + weekdays3 + ":", dates3);
-    
-        // **Ensure the sequence is maintained correctly** using `await` for fetch calls
-        await fetchAndFilterDatabaseDatesLab(dates1, maxDates, weekdays1, batch1);
-        await fetchAndFilterDatabaseDatesLab(dates2, maxDates, weekdays2, batch2);
-        await fetchAndFilterDatabaseDatesLab(dates3, maxDates, weekdays3, batch3);
-        // In printDateslab()
-console.log("printDateslab() started");
-console.log("Dates collected for batch1:", dates1);
-console.log("Dates collected for batch2:", dates2);
-console.log("Dates collected for batch3:", dates3);
-console.log("Calling fetchAndFilterDatabaseDatesLab for batch1:", weekdays1, batch1, dates1);
-console.log("Calling fetchAndFilterDatabaseDatesLab for batch2:", weekdays2, batch2, dates2);
-console.log("Calling fetchAndFilterDatabaseDatesLab for batch3:", weekdays3, batch3, dates3);
+   async function printDateslab() {
+    const resultDiv = document.getElementById('result');
+    resultDiv.innerHTML = ''; // Clear previous output
 
+    const startDateInput = document.getElementById("startDate");
+    const endDateInput = document.getElementById("endDate");
+    const maxDates = parseInt(document.getElementById('input5').value, 10) || 1000;
 
+    const weekdays1 = document.getElementById("weekdays1").value;
+    const weekdays2 = document.getElementById("weekdays2").value;
+    const weekdays3 = document.getElementById("weekdays3").value;
 
+    const batch1 = document.getElementById("batch1").value.trim() || 'Batch 1';
+    const batch2 = document.getElementById("batch2").value.trim() || 'Batch 2';
+    const batch3 = document.getElementById("batch3").value.trim() || 'Batch 3';
+
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
+
+    if (isNaN(startDate) || isNaN(endDate)) {
+        resultDiv.innerHTML = "<p style='color:red'>Error: Please provide valid start and end dates.</p>";
+        return;
     }
-    
+
+    // Helper to get day number from day name
+    function getDayNumber(dayName) {
+        const days = {
+            "Sunday": 0, "Monday": 1, "Tuesday": 2,
+            "Wednesday": 3, "Thursday": 4, "Friday": 5, "Saturday": 6
+        };
+        return days[dayName];
+    }
+
+    function collectAllDates(dayOfWeek) {
+        const datesArray = [];
+        let currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+            if (currentDate.getDay() === dayOfWeek) {
+                datesArray.push(currentDate.toLocaleDateString('en-GB', {
+                    year: 'numeric', month: 'numeric', day: 'numeric'
+                }));
+            }
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        return datesArray;
+    }
+
+    // Collect dates for all selected weekdays
+    const dates1 = weekdays1 ? collectAllDates(getDayNumber(weekdays1)) : [];
+    const dates2 = weekdays2 ? collectAllDates(getDayNumber(weekdays2)) : [];
+    const dates3 = weekdays3 ? collectAllDates(getDayNumber(weekdays3)) : [];
+
+    // Array to collect all filtered dates for display
+    const allFilteredDates = [];
+
+    // Fetch filtered dates for each batch and store in allFilteredDates
+    async function fetchAndCollect(dates, maxDates, weekday, batchName) {
+        if (dates.length === 0) return;
+
+        try {
+            const response = await fetch('/get_filtered_dates', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    year: document.querySelector('.year-select-btn.active')?.textContent || 'FE',
+                    semiFinalDates: dates
+                })
+            });
+            if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+            const data = await response.json();
+
+            // Take only up to maxDates from filteredDates
+            const filtered = data.filteredDates.slice(0, maxDates);
+
+            // Store in shared array
+            allFilteredDates.push({
+                batchName,
+                weekday,
+                dates: filtered
+            });
+        } catch (error) {
+            allFilteredDates.push({
+                batchName,
+                weekday,
+                error: error.message
+            });
+        }
+    }
+
+    // Run all fetches in parallel
+    await Promise.all([
+        fetchAndCollect(dates1, maxDates, weekdays1, batch1),
+        fetchAndCollect(dates2, maxDates, weekdays2, batch2),
+        fetchAndCollect(dates3, maxDates, weekdays3, batch3)
+    ]);
+
+    // Now print all collected filtered dates to the result div
+    allFilteredDates.forEach(group => {
+        if (group.error) {
+            resultDiv.innerHTML += `<p style="color:red">${group.batchName} (${group.weekday}): Error - ${group.error}</p>`;
+        } else {
+            resultDiv.innerHTML += `<h4>${group.batchName} (${group.weekday})</h4><ul>`;
+            group.dates.forEach(date => {
+                resultDiv.innerHTML += `<li>${date}</li>`;
+            });
+            resultDiv.innerHTML += '</ul>';
+        }
+    });
+}
+
+
+
+
+
  async function fetchAndFilterDatabaseDatesLab(dates, maxDates, weekday, batchName) {
     const resultDiv = document.getElementById('result');
     try {
