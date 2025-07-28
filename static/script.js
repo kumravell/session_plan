@@ -704,182 +704,146 @@ var dates3 = [];
     
     
 
+// Helper function to get batch-wise dates
+function getBatchDates(startDate, endDate, weekdays1, weekdays2, weekdays3) {
+    function collectAllDates(dayOfWeek) {
+        const datesArray = [];
+        const currentDate = new Date(startDate);
+        while (currentDate <= endDate) {
+            if (currentDate.getDay() === dayOfWeek) {
+                datesArray.push(currentDate.toLocaleDateString('en-GB', {
+                    year: 'numeric', month: 'numeric', day: 'numeric'
+                }));
+            }
+            currentDate.setDate(currentDate.getDate() + 1);
+        }
+        return datesArray;
+    }
 
-    async function updateAndDownloadlab() {
-        var startDateInput = document.getElementById('startDate');
-        var endDateInput = document.getElementById('endDate');
-        var excelFileInput = document.getElementById('excelFile');
-        var resultDiv = document.getElementById('result');
-        var input5 = parseInt(document.getElementById('input5').value, 10); 
+    const dates1 = collectAllDates(getDayNumber(weekdays1));
+    const dates2 = collectAllDates(getDayNumber(weekdays2));
+    const dates3 = collectAllDates(getDayNumber(weekdays3));
 
-        var startDate = new Date(startDateInput.value);
-        var endDate = new Date(endDateInput.value);
+    return { dates1, dates2, dates3 };
+}
 
-        if (startDate > endDate) {
-          resultDiv.innerHTML = '<p>End date must be equal to or after the start date.</p>';
-          return;
+async function updateAndDownloadlab() {
+    var startDateInput = document.getElementById('startDate');
+    var endDateInput = document.getElementById('endDate');
+    var excelFileInput = document.getElementById('excelFile');
+    var resultDiv = document.getElementById('result');
+    var input5 = parseInt(document.getElementById('input5').value, 10); 
+
+    var startDate = new Date(startDateInput.value);
+    var endDate = new Date(endDateInput.value);
+
+    if (startDate > endDate) {
+        resultDiv.innerHTML = '<p>End date must be equal to or after the start date.</p>';
+        return;
+    }
+
+    var file = excelFileInput.files[0];
+
+    if (!file) {
+        resultDiv.innerHTML = '<p>Please upload an Excel file.</p>';
+        return;
+    }
+
+    try {
+        const workbook = new ExcelJS.Workbook();
+        await workbook.xlsx.load(file);
+        const sheet = workbook.getWorksheet(1);
+
+        // Get weekday selections and batch dates
+        const weekdays1 = document.getElementById("weekdays1").value;
+        const weekdays2 = document.getElementById("weekdays2").value;
+        const weekdays3 = document.getElementById("weekdays3").value;
+
+        const { dates1, dates2, dates3 } = getBatchDates(startDate, endDate, weekdays1, weekdays2, weekdays3);
+
+        const documentContent = document.getElementById('documentContent1').innerText.trim();
+        const documentRows = documentContent.split('\n');
+        for (let i = 0; i < documentRows.length; i++) {
+            sheet.getCell(`B${9 + i}`).value = documentRows[i];
         }
 
-        var file = excelFileInput.files[0];
+        const courseOutcomesContainer = document.getElementById('courseOutcomesContainer');
+        const tableRows = courseOutcomesContainer.querySelectorAll('table tr:not(:first-child)'); 
+        const startRow = 34;
+        const startColumn = 'J';
 
-        if (!file) {
-          resultDiv.innerHTML = '<p>Please upload an Excel file.</p>';
-          return;
-        }
+        tableRows.forEach((row, rowIndex) => {
+            const cells = row.querySelectorAll('td');
+            cells.forEach((cell, cellIndex) => {
+                const inputField = cell.querySelector('input');
+                const cellValue = inputField ? inputField.value.trim() : cell.innerText.trim();
+                sheet.getCell(`${String.fromCharCode(startColumn.charCodeAt(0) + cellIndex)}${startRow + rowIndex}`).value = cellValue;
+            });
+        });
 
-        try {
-          const workbook = new ExcelJS.Workbook();
-          await workbook.xlsx.load(file);
-          const sheet = workbook.getWorksheet(1);
+        var batch1Value = document.getElementById('batch1').value;
+        var batch2Value = document.getElementById('batch2').value;
+        var batch3Value = document.getElementById('batch3').value;
 
-
-
-
-          var dates = getDates(startDate, endDate);
-          var listItemNodes = resultDiv.querySelectorAll('li');
-          var contentItems = Array.from(listItemNodes).map(item => item.textContent.trim());
-
-
-
-
-
-
-
-           
-
-
-          //DOCUMENTCONTENT1
-          
-          const documentContent = document.getElementById('documentContent1').innerText.trim();
-          const documentRows = documentContent.split('\n');
-          for (let i = 0; i < documentRows.length; i++) {
-              sheet.getCell(`B${9 + i}`).value = documentRows[i];
-          }
-
-
-
-
-
-          //courseOutcomesContainer
-          const courseOutcomesContainer = document.getElementById('courseOutcomesContainer');
-          const tableRows = courseOutcomesContainer.querySelectorAll('table tr:not(:first-child)'); 
-          const startRow = 34;
-          const startColumn = 'J';
-
-          tableRows.forEach((row, rowIndex) => {
-              const cells = row.querySelectorAll('td');
-              cells.forEach((cell, cellIndex) => {
-                  const inputField = cell.querySelector('input');
-                  const cellValue = inputField ? inputField.value.trim() : cell.innerText.trim();
-                  sheet.getCell(`${String.fromCharCode(startColumn.charCodeAt(0) + cellIndex)}${startRow + rowIndex}`).value = cellValue;
-              });
-          });
-
-
-          //result
-          var batch1Value = document.getElementById('batch1').value;
-          var batch2Value = document.getElementById('batch2').value;
-          var batch3Value = document.getElementById('batch3').value;
-          
-        // Print batch IDs
         sheet.getCell('C8').value = batch1Value;
         sheet.getCell('D8').value = batch2Value;
         sheet.getCell('E8').value = batch3Value;
-          
-          var dates = printDateslab();
-          var dates1 = dates.dates1;
-          var dates2 = dates.dates2;
-          var dates3 = dates.dates3;
-          
-          
-          
-          
-        // Printing dates for batch 1 
+
         for (let i = 0; i < Math.min(dates1.length, input5); i++) {
-            console.log(`Setting C${9 + i} to ${dates1[i]}`);
             sheet.getCell(`C${9 + i}`).value = dates1[i];
         }
-  
-        // Printing dates for batch 2 
         for (let i = 0; i < Math.min(dates2.length, input5); i++) {
-            console.log(`Setting D${9 + i} to ${dates2[i]}`);
             sheet.getCell(`D${9 + i}`).value = dates2[i];
         }
-  
-        // Printing dates for batch 3 
         for (let i = 0; i < Math.min(dates3.length, input5); i++) {
-            console.log(`Setting E${9 + i} to ${dates3[i]}`);
             sheet.getCell(`E${9 + i}`).value = dates3[i];
         }
-          
 
+        const inputFields = ['input1', 'input2', 'input3', 'input4', 'input5', 'input6', 'input7', 'input8', 'input9', 'input10'];
+        const labels = ['Semester', 'Year', 'Course Title', 'Course Code', 'Total Contact Hours', 'Duration of TEE', 'TEE Marks', 'IA Marks', 'Subject In-charge', 'Course Coordinator'];
 
+        for (let i = 0; i < inputFields.length; i++) {
+            const inputId = inputFields[i];
+            const row = 9 + Math.floor(i / 2);  
+            const col = i % 2 === 0 ? 'J' : 'L';  
+            let valueToPrint = labels[i] ? `${labels[i]}: ${document.getElementById(inputId).value}` : document.getElementById(inputId).value;
+            sheet.getCell(`${col}${row}`).value = valueToPrint;
+        }
 
-          
+        const selectedOption = document.getElementById('input11').value;
+        const departmentValue = `Department: ${selectedOption}`;
+        sheet.getCell('A5').value = departmentValue;
+        sheet.getCell('J5').value = departmentValue;
 
+        const allOutcomes = collectAndStoreOutcomes() || [];
+        for (let i = 0; i < allOutcomes.length; i += 2) {
+            const colI = 'K';
+            const colR = 'T';
+            const colH = 'J';
+            const row = 19 + i / 2 + 1;
+            sheet.getCell(`${colH}${row}`).value = i / 2 + 1;
+            sheet.getCell(`${colI}${row}`).value = allOutcomes[i];
+            sheet.getCell(`${colR}${row}`).value = allOutcomes[i + 1] || '';
+        }
 
-          //course plan
-          const inputFields = ['input1', 'input2', 'input3', 'input4', 'input5', 'input6', 'input7', 'input8', 'input9', 'input10'];
-          const labels = ['Semester', 'Year', 'Course Title', 'Course Code', 'Total Contact Hours', 'Duration of TEE', 'TEE Marks', 'IA Marks', 'Subject In-charge', 'Course Coordinator'];
+        const updatedData = await workbook.xlsx.writeBuffer();
+        const blob = new Blob([updatedData], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
 
-          for (let i = 0; i < inputFields.length; i++) {
-              const inputId = inputFields[i];
-              const row = 9 + Math.floor(i / 2);  
-              const col = i % 2 === 0 ? 'J' : 'L';  
-              let valueToPrint = "";
-              if (labels[i]) {
-                  valueToPrint = `${labels[i]}: ${document.getElementById(inputId).value}`;
-              } else {
-                  valueToPrint = document.getElementById(inputId).value;
-              }
-              sheet.getCell(`${col}${row}`).value = valueToPrint;
-          }
+        var a = document.createElement('a');
+        var searchTerm = document.getElementById('input9').value;
+        a.href = url;
+        a.download = searchTerm + '_lab_session_plan.xlsx';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
 
-          //Department
-          const selectedOption = document.getElementById('input11').value;
-          const departmentValue = `Department: ${selectedOption}`;
-          sheet.getCell('A5').value = departmentValue;
-          sheet.getCell('J5').value = departmentValue;
-
-
-          // allOutcomes 
-          const allOutcomes = collectAndStoreOutcomes() || [];
-
-          for (let i = 0; i < allOutcomes.length; i += 2) {
-              const colI = 'K';
-              const colR = 'T';
-              const colH = 'J';
-              const row = 19 + i / 2 + 1;  
-
-              
-              sheet.getCell(`${colH}${row}`).value = i / 2 + 1;
-
-              
-              sheet.getCell(`${colI}${row}`).value = allOutcomes[i];
-              sheet.getCell(`${colR}${row}`).value = allOutcomes[i + 1] || '';  
-          }
-
-
-
-
-          // Save the workbook and trigger download
-          const updatedData = await workbook.xlsx.writeBuffer();
-          const blob = new Blob([updatedData], { type: 'application/octet-stream' });
-          const url = URL.createObjectURL(blob);
-
-          var a = document.createElement('a');
-          var searchTerm = document.getElementById('input9').value;
-          a.href = url;
-          a.download = searchTerm + '_lab_session_plan.xlsx';
-          a.style.display = 'none';
-          document.body.appendChild(a);
-          a.click();
-          document.body.removeChild(a);
-          } catch (error) {
-              console.error('Error processing file:', error);
-          }
-      }
-
+    } catch (error) {
+        console.error('Error processing file:', error);
+        resultDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+    }
+}
 
 
 
