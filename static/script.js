@@ -391,125 +391,20 @@ var dates3 = [];
 
 
 
-
-
-
-    // function printDateslab() {
-    //     var resultDiv = document.getElementById('result');
-    //     var startDateInput = document.getElementById("startDate");
-    //     var endDateInput = document.getElementById("endDate");
-    //     var maxDates = parseInt(document.getElementById('input5').value, 10);
-    //     var batch1 = document.getElementById("batch1").value;
-    //     var batch2 = document.getElementById("batch2").value;
-    //     var batch3 = document.getElementById("batch3").value;
-    //     var weekdays1 = document.getElementById("weekdays1").value;
-    //     var weekdays2 = document.getElementById("weekdays2").value;
-    //     var weekdays3 = document.getElementById("weekdays3").value;
-    
-    //     if (!resultVisible) {
-    //         resultDiv.style.display = 'block';
-    //         resultVisible = true;
-    //     }
-    
-    //     resultDiv.innerHTML = "";
-    
-    //     var startDate = new Date(startDateInput.value);
-    //     var endDate = new Date(endDateInput.value);
-    
-    //     console.log("Start date:", startDate);
-    //     console.log("End date:", endDate);
-    
-    //     if (isNaN(startDate) || isNaN(endDate)) {
-    //         resultDiv.innerHTML = "<p>Error: Please provide valid start and end dates.</p>";
-    //         return;
-    //     }
-    
-    //     // Extract ignore dates from additional date inputs
-    //     // var ignoreDates = parseLocalIgnoreDates();
-    
-    //     // Add dates from startDate1 to endDate1
-    //     var startDate1 = new Date(document.getElementById('startDate1').value);
-    //     var endDate1 = new Date(document.getElementById('endDate1').value);
-    //     if (!isNaN(startDate1) && !isNaN(endDate1)) {
-    //         while (startDate1 <= endDate1) {
-    //             ignoreDates.push(new Date(startDate1));
-    //             startDate1.setDate(startDate1.getDate() + 1);
-    //         }
-    //     }
-    
-    //     // Add dates from startDate2 to endDate2
-    //     var startDate2 = new Date(document.getElementById('startDate2').value);
-    //     var endDate2 = new Date(document.getElementById('endDate2').value);
-    //     if (!isNaN(startDate2) && !isNaN(endDate2)) {
-    //         while (startDate2 <= endDate2) {
-    //             ignoreDates.push(new Date(startDate2));
-    //             startDate2.setDate(startDate2.getDate() + 1);
-    //         }
-    //     }
-    
-    //     // console.log("Local ignore dates:", ignoreDates);
-    
-    //     fetchIgnoreDates(function(remoteIgnoreDates) {
-    //         const allIgnoreDates = [...ignoreDates, ...remoteIgnoreDates];
-    //         console.log("Combined ignore dates:", allIgnoreDates);
-    
-    //         if (startDate <= endDate) {
-
-    //             var currentDate = startDate;
-    
-    //             while (currentDate <= endDate) {
-    //                 var dayOfWeek = currentDate.getDay();
-    //                 var dayName = getDayName(dayOfWeek);
-    
-    //                 var formattedDate = currentDate.toLocaleDateString('en-GB', {
-    //                     year: 'numeric', month: 'numeric', day: 'numeric'
-    //                 });
-    
-    //                 var shouldIgnoreDate = allIgnoreDates.some(ignoreDate => isSameDay(ignoreDate, currentDate));
-    
-    //                 if (!shouldIgnoreDate) {
-    //                     if (dayName === weekdays1 && dates1.length < maxDates) {
-    //                         dates1.push(formattedDate);
-    //                     }
-    //                     if (dayName === weekdays2 && dates2.length < maxDates) {
-    //                         dates2.push(formattedDate);
-    //                     }
-    //                     if (dayName === weekdays3 && dates3.length < maxDates) {
-    //                         dates3.push(formattedDate);
-    //                     }
-    //                 }
-    
-    //                 currentDate.setDate(currentDate.getDate() + 1);
-    //             }
-    
-    //             console.log("Dates for " + weekdays1 + ":", dates1);
-    //             console.log("Dates for " + weekdays2 + ":", dates2);
-    //             console.log("Dates for " + weekdays3 + ":", dates3);
-    
-    //             var resultHTML = "";
-    //             if (dates1.length > 0) {
-    //                 resultHTML += "<h3>" + batch1 + ":</h3><ul><li>" + dates1.join("</li><li>") + "</li></ul>";
-    //             }
-    //             if (dates2.length > 0) {
-    //                 resultHTML += "<h3>" + batch2 + ":</h3><ul><li>" + dates2.join("</li><li>") + "</li></ul>";
-    //             }
-    //             if (dates3.length > 0) {
-    //                 resultHTML += "<h3>" + batch3 + ":</h3><ul><li>" + dates3.join("</li><li>") + "</li></ul>";
-    //             }
-    
-    //             if (resultHTML === "") {
-    //                 resultHTML = "<p>No matching dates found within the given range.</p>";
-    //             }
-    //             resultDiv.innerHTML = resultHTML;
-    //         } else {
-    //             resultDiv.innerHTML = "<p>Error: 'Start' date should be before or equal to 'End' date.</p>";
-    //         }
-    //     });return {
-    //         dates1: dates1,
-    //         dates2: dates2,
-    //         dates3: dates3
-    //     };
-    // }
+  
+    // Convert weekday name to number
+    function getDayNumber(dayName) {
+        const days = {
+            "Sunday": 0,
+            "Monday": 1,
+            "Tuesday": 2,
+            "Wednesday": 3,
+            "Thursday": 4,
+            "Friday": 5,
+            "Saturday": 6
+        };
+        return days[dayName];
+    }
     
 
     async function printDateslab() {
@@ -570,71 +465,35 @@ var dates3 = [];
         await fetchAndFilterDatabaseDatesLab(dates3, maxDates, weekdays3, batch3);
     }
     
-    async function fetchAndFilterDatabaseDatesLab(semiFinalDates, maxDates, weekdayName, batchName) {
-        if (!selectedYear) {
-            alert("Please select a year by clicking one of the buttons.");
-            return;
+    async function fetchAndFilterDatabaseDatesLab(dates, maxDates, weekday, batchName) {
+    const resultDiv = document.getElementById('result');
+
+    try {
+        const response = await fetch('/get_filtered_dates', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                year: document.querySelector('.year-select-btn.active')?.textContent || 'FE',
+                semiFinalDates: dates
+            })
+        });
+
+        const data = await response.json();
+        const filteredDates = data.filteredDates || [];
+
+        resultDiv.innerHTML += `<h4>${batchName} (${weekday})</h4><ul>`;
+        for (let i = 0; i < Math.min(filteredDates.length, maxDates); i++) {
+            resultDiv.innerHTML += `<li>${filteredDates[i]}</li>`;
         }
-    
-        try {
-            let response = await fetch("/get_filtered_dates", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    year: selectedYear,
-                    semiFinalDates: semiFinalDates
-                })
-            });
-    
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-    
-            let data = await response.json();
-            // console.log("Received filtered dates for " + weekdayName + ":", data.filteredDates);
-    
-            let resultDiv = document.getElementById("result");
-    
-            // Show the batch name only if it's provided
-            let batchText = batchName ? ` (${batchName})` : "";
-    
-            resultDiv.innerHTML += `<h4><b>Available Dates for ${weekdayName}${batchText}</b></h4>`;
-    
-            if (data.filteredDates.length === 0) {
-                resultDiv.innerHTML += `<p><b>No available dates for ${weekdayName}${batchText}.</b></p>`;
-            } else {
-                const filteredDates = data.filteredDates.filter(date => !semiFinalDates.includes(date));
-    
-                const limitedDates = filteredDates.slice(0, maxDates);
-    
-                let list = "<ul>";
-                limitedDates.forEach(date => {
-                    let formattedDate = formatDate(date);
-                    list += `<li>${formattedDate}</li>`;
-                });
-                list += "</ul>";
-                resultDiv.innerHTML += list;
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        }
+        resultDiv.innerHTML += `</ul>`;
+    } catch (error) {
+        resultDiv.innerHTML += `<p style="color:red;">Error fetching dates: ${error.message}</p>`;
     }
-    
-    // Convert weekday name to number
-    function getDayNumber(dayName) {
-        const days = {
-            "Sunday": 0,
-            "Monday": 1,
-            "Tuesday": 2,
-            "Wednesday": 3,
-            "Thursday": 4,
-            "Friday": 5,
-            "Saturday": 6
-        };
-        return days[dayName];
-    }
+}
+
+  
     
     
 
@@ -656,85 +515,6 @@ var dates3 = [];
 
    
     
-
-
-    //-------------------------KUMAR(RECENT)--------------------
-    // function printDates() {
-    //     var resultDiv = document.getElementById('result');
-    //     var startDateInput = document.getElementById("startDate");
-    //     var endDateInput = document.getElementById("endDate");
-    //     var resultContainer = document.getElementById("result");
-    //     var selectedDays = getSelectedDays();
-    //     var maxDates = parseInt(document.getElementById('input5').value, 10);
-    //     if (!resultVisible) {
-    //         resultDiv.style.display = 'block';
-    //         resultVisible = true;
-    //     }
-    
-    //     resultDiv.innerHTML = "";
-    
-    //     var startDate = new Date(startDateInput.value);
-    //     var endDate = new Date(endDateInput.value);
-    
-    //     var ignoreStartDate1 = new Date(document.getElementById("startDate1").value);
-    //     var ignoreEndDate1 = new Date(document.getElementById("endDate1").value);
-    //     var ignoreStartDate2 = new Date(document.getElementById("startDate2").value);
-    //     var ignoreEndDate2 = new Date(document.getElementById("endDate2").value);
-    
-    //     console.log("Start date:", startDate);
-    //     console.log("End date:", endDate);
-    
-    //     if (isNaN(startDate) || isNaN(endDate)) {
-    //         resultContainer.innerHTML = "<p>Error: Please provide valid start and end dates.</p>";
-    //         return;
-    //     }
-    
-    //     const localIgnoreDates = parseLocalIgnoreDates();
-    //     console.log("Local ignore dates:", localIgnoreDates);
-    
-    //     fetchIgnoreDates(function(remoteIgnoreDates) {
-    //         const ignoreDates = [...localIgnoreDates, ...remoteIgnoreDates];
-    //         console.log("Combined ignore dates:", ignoreDates);
-    
-    //         if (startDate <= endDate) {
-    //             var dates = [];
-    //             var currentDate = startDate;
-    
-    //             while (currentDate <= endDate) {
-    //                 var dayOfWeek = currentDate.getDay();
-    //                 var dayName = getDayName(dayOfWeek);
-    
-    //                 if (selectedDays.includes(dayName)) {
-    //                     var formattedDate = currentDate.toLocaleDateString('en-GB', {
-    //                         year: 'numeric', month: 'numeric', day: 'numeric'
-    //                     });
-    
-    //                     var shouldIgnoreDate = ignoreDates.some(ignoreDate => isSameDay(ignoreDate, currentDate)) ||
-    //                         (currentDate >= ignoreStartDate1 && currentDate <= ignoreEndDate1) ||
-    //                         (currentDate >= ignoreStartDate2 && currentDate <= ignoreEndDate2);
-    
-    //                     if (!shouldIgnoreDate) {
-    //                         dates.push(formattedDate);
-    //                         if (dates.length >= maxDates) {
-    //                             break;
-    //                         }
-    //                     }
-    //                 }
-    
-    //                 currentDate.setDate(currentDate.getDate() + 1);
-    //             }
-    
-    //             console.log("Semi-Final dates:", dates);
-    //             fetchAndFilterDatabaseDates(dates);
-    //             resultContainer.innerHTML = dates.length > 0 ?
-    //                 "<ul><li>" + dates.join("</li><li>") + "</li></ul>" :
-    //                 "<p>No matching dates found within the given range.</p>";
-    //         } else {
-    //             resultContainer.innerHTML = "<p>Error: 'Start' date should be before or equal to 'End' date.</p>";
-    //         }
-    //     });
-    // }
-
     //
     function printDates() {
         var resultDiv = document.getElementById('result');
@@ -1274,34 +1054,6 @@ var dates3 = [];
 
 
 
-
-
-
-
-
-        // function showLoginPopup() {
-        //     document.getElementById("loginPopup").style.display = "block";
-        // }
-
-        // function hideLoginPopup() {
-        //     document.getElementById("loginPopup").style.display = "none";
-        // }
-
-        // function validateLogin() {
-        //     var username = document.getElementById('username').value;
-        //     var password = document.getElementById('password').value;
-        //     if (username === "" || password === "") {
-        //         alert("Please enter username and password");
-        //         return false;
-        //     }
-        //     return true;
-        // }
-
-
-
-
-
-        
 
 
         function createOutcomeTable(outcomes) {
