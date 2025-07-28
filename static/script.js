@@ -76,7 +76,7 @@ function readWordDocuments() {
             .then(data => {
                 output.innerHTML = data.content;
                 lastColumnNumericValues = data.last_column_values.map(value => parseFloat(value)).filter(value => !isNaN(value));
-                console.log('Numeric Values from Last Column:', lastColumnNumericValues);
+                //console.log('Numeric Values from Last Column:', lastColumnNumericValues);
                     
                 function calculateCumulativeSums(initialSum, numericValues) {
                     let cumulativeSum = initialSum;
@@ -90,10 +90,10 @@ function readWordDocuments() {
             
                 const initialSum = 8; 
                 cumulativeSums = calculateCumulativeSums(initialSum, lastColumnNumericValues);
-                console.log('Cumulative Sums:', cumulativeSums);
+                //console.log('Cumulative Sums:', cumulativeSums);
             
                 const incrementedSums = cumulativeSums.map(sum => sum + 1);
-                console.log('Incremented Sums:', incrementedSums);
+                //console.log('Incremented Sums:', incrementedSums);
 
             })
             .catch(error => {
@@ -107,7 +107,7 @@ function readWordDocuments() {
     }
     
 }
-console.log('Global Use of Cumulative Sums:', cumulativeSums);
+//console.log('Global Use of Cumulative Sums:', cumulativeSums);
 
 
 function toggleOutcomeTableVisibility() {
@@ -173,8 +173,8 @@ function collectAndStoreOutcomes() {
 
     createOutcomeTable(evenIndexOutcomes);
 
-    console.log('All Outcomes:', allOutcomes);
-    console.log('Even Index Outcomes:', evenIndexOutcomes);
+    //console.log('All Outcomes:', allOutcomes);
+    //console.log('Even Index Outcomes:', evenIndexOutcomes);
 
     return allOutcomes;
 }
@@ -201,7 +201,7 @@ function collectAndStoreOutcomes() {
             input9: document.getElementById('input9').value,
             input10: document.getElementById('input10').value,
         };
-        console.log(inputValues);
+        //console.log(inputValues);
     }
 
     function toggleInputs() {
@@ -428,7 +428,7 @@ var dates3 = [];
     const endDate = new Date(endDateInput.value);
 
     if (isNaN(startDate) || isNaN(endDate)) {
-        console.error("Invalid start or end date");
+        //console.error("Invalid start or end date");
         resultDiv.innerHTML = "<p style='color:red'>Error: Please provide valid start and end dates.</p>";
         return;
     }
@@ -462,9 +462,9 @@ var dates3 = [];
     const dates2 = weekdays2 ? collectAllDates(getDayNumber(weekdays2)) : [];
     const dates3 = weekdays3 ? collectAllDates(getDayNumber(weekdays3)) : [];
 
-    console.log("Dates for batch 1:", dates1);
-    console.log("Dates for batch 2:", dates2);
-    console.log("Dates for batch 3:", dates3);
+    //console.log("Dates for batch 1:", dates1);
+    //console.log("Dates for batch 2:", dates2);
+    //console.log("Dates for batch 3:", dates3);
 
     const allFilteredDates = [];
 
@@ -500,7 +500,7 @@ var dates3 = [];
                 dates: filtered
             });
 
-            console.log(`Filtered Dates for ${batchName} (${weekday}):`, filtered);
+            //console.log(`Filtered Dates for ${batchName} (${weekday}):`, filtered);
 
         } catch (error) {
             allFilteredDates.push({
@@ -508,7 +508,7 @@ var dates3 = [];
                 weekday,
                 error: error.message
             });
-            console.error(`Error fetching filtered dates for ${batchName} (${weekday}):`, error.message);
+            //console.error(`Error fetching filtered dates for ${batchName} (${weekday}):`, error.message);
         }
     }
 
@@ -556,7 +556,7 @@ var dates3 = [];
         });
         const data = await response.json();
 
-        console.log(`Filtered Dates for ${batchName} (${weekday}):`, data.filteredDates);
+        //console.log(`Filtered Dates for ${batchName} (${weekday}):`, data.filteredDates);
 
         // Append results to #result div
         resultDiv.innerHTML += `<h4>${batchName} (${weekday})</h4><ul>`;
@@ -566,7 +566,7 @@ var dates3 = [];
         resultDiv.innerHTML += '</ul>';
 
     } catch (error) {
-        console.error(error);
+        //console.error(error);
         resultDiv.innerHTML += `<p style="color:red;">Error fetching dates for ${batchName}: ${error.message}</p>`;
     }
 }
