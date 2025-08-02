@@ -1,6 +1,6 @@
 let selectedYear = null; // Variable to store the selected year
 
-function selectYear(year) {
+/*function selectYear(year) {
     // Reset button styles
     document.getElementById("feButton").classList.remove("selected");
     document.getElementById("seButton").classList.remove("selected");
@@ -14,7 +14,34 @@ function selectYear(year) {
         document.getElementById("seButton").classList.add("selected");
         // console.log("Selected Year: SE/TE/BE");
     }
+}*/
+
+
+function selectYear(year) {
+    // Remove 'selected' class from all buttons
+    const buttons = ['feButton', 'seButton', 'teButton', 'beButton'];
+    buttons.forEach(id => document.getElementById(id).classList.remove('selected'));
+
+    // Set selectedYear to the clicked button's year
+    selectedYear = year;
+
+    // Add 'selected' class to the clicked button
+    const selectedBtnId = year.toLowerCase() + 'Button'; // 'feButton' etc.
+    document.getElementById(selectedBtnId).classList.add('selected');
+
+    // Optionally, fetch dates for this selectedYear here or elsewhere
+    console.log("Selected Year:", selectedYear);
 }
+
+// Add event listeners on page load to all buttons
+document.querySelectorAll('.year-select-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        selectYear(button.textContent.trim());
+    });
+});
+
+
+
 
 function updateFileNames() {
             const fileInput = document.getElementById('wordFileInput1');
@@ -477,7 +504,8 @@ var dates3 = [];
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    year: document.querySelector('.year-select-btn.active')?.textContent || 'FE',
+                    year: selectedYear,  // send the selected year
+                    //year: document.querySelector('.year-select-btn.active')?.textContent || 'FE',
                     semiFinalDates: dates
                 })
             });
@@ -1167,3 +1195,4 @@ async function updateAndDownloadlab() {
             }
             return true;
         }
+
