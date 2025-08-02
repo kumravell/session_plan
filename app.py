@@ -171,7 +171,6 @@ def get_filtered_dates():
     year = data.get('year')
     semi_final_dates = data.get('semiFinalDates', [])
 
-    # ✅ Avoid empty tuple in SQL
     if not semi_final_dates:
         return jsonify({"filteredDates": []})
 
@@ -183,11 +182,15 @@ def get_filtered_dates():
         except ValueError:
             continue
 
-    tables_to_check = []
-    if year in ['SE', 'TE', 'BE']:
-        tables_to_check = ['general_holidays', 'se_te_be']
-    elif year == 'FE':
+    # Check individual tables for each year
+    if year == 'FE':
         tables_to_check = ['general_holidays', 'fe']
+    elif year == 'SE':
+        tables_to_check = ['general_holidays', 'se']
+    elif year == 'TE':
+        tables_to_check = ['general_holidays', 'te']
+    elif year == 'BE':
+        tables_to_check = ['general_holidays', 'be']
     else:
         return jsonify({"error": "Invalid Year. Please enter FE, SE, TE, or BE."}), 400
 
@@ -198,7 +201,7 @@ def get_filtered_dates():
         cursor = connection.cursor()
 
         for table in tables_to_check:
-            if semi_final_dates_converted:  # ✅ double check here too
+            if semi_final_dates_converted:
                 query = f"SELECT dates FROM {table} WHERE dates IN %s"
                 cursor.execute(query, (tuple(semi_final_dates_converted),))
                 rows = cursor.fetchall()
@@ -212,6 +215,54 @@ def get_filtered_dates():
 
     except psycopg2.Error as err:
         return jsonify({"error": str(err)}), 500
+
+
+# def get_filtered_dates():
+#     data = request.get_json()
+#     year = data.get('year')
+#     semi_final_dates = data.get('semiFinalDates', [])
+
+#     # ✅ Avoid empty tuple in SQL
+#     if not semi_final_dates:
+#         return jsonify({"filteredDates": []})
+
+#     semi_final_dates_converted = []
+#     for date in semi_final_dates:
+#         try:
+#             converted_date = datetime.strptime(date, '%d/%m/%Y').strftime('%Y-%m-%d')
+#             semi_final_dates_converted.append(converted_date)
+#         except ValueError:
+#             continue
+
+#     tables_to_check = []
+#     if year in ['SE', 'TE', 'BE']:
+#         tables_to_check = ['general_holidays', 'se_te_be']
+#     elif year == 'FE':
+#         tables_to_check = ['general_holidays', 'fe']
+#     else:
+#         return jsonify({"error": "Invalid Year. Please enter FE, SE, TE, or BE."}), 400
+
+#     existing_holidays = set()
+
+#     try:
+#         connection = psycopg2.connect(**DB_CONFIG)
+#         cursor = connection.cursor()
+
+#         for table in tables_to_check:
+#             if semi_final_dates_converted:  # ✅ double check here too
+#                 query = f"SELECT dates FROM {table} WHERE dates IN %s"
+#                 cursor.execute(query, (tuple(semi_final_dates_converted),))
+#                 rows = cursor.fetchall()
+#                 existing_holidays.update([row[0].strftime('%Y-%m-%d') for row in rows])
+
+#         cursor.close()
+#         connection.close()
+
+#         filtered_dates = [d for d in semi_final_dates_converted if d not in existing_holidays]
+#         return jsonify({"filteredDates": filtered_dates})
+
+#     except psycopg2.Error as err:
+#         return jsonify({"error": str(err)}), 500
 
 
 def filter_dates(start_date, end_date, holidays):
@@ -438,3 +489,4 @@ def process_document_B():
 if __name__ == '__main__':
    os.makedirs(FILES_DIR, exist_ok=True)
    app.run(debug=True)
+
