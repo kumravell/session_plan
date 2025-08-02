@@ -724,6 +724,17 @@ header img {
   }
 }
 
+.year-select-btn {
+  padding: 8px 16px;
+  margin: 4px;
+  cursor: pointer;
+}
+
+.year-select-btn.active {
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+}
 
 
 
@@ -1097,5 +1108,6 @@ header img {
   .button-group {
     margin: 20px;
   }
+
 
 }
