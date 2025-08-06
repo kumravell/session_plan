@@ -20,17 +20,28 @@
 let selectedYear = '';
 
 function selectYear(year) {
-  selectedYear = year;
-  
-  // Remove 'selected' class from all buttons
-  document.querySelectorAll('.year-select-btn').forEach(btn => btn.classList.remove('selected'));
-  
-  // Add 'selected' class to the clicked button
-  if (year === 'FE') document.getElementById('feButton').classList.add('selected');
-  if (year === 'SE') document.getElementById('seButton').classList.add('selected');
-  if (year === 'TE') document.getElementById('teButton').classList.add('selected');
-  if (year === 'BE') document.getElementById('beButton').classList.add('selected');
+    // Reset button styles
+    ['feButton', 'seButton', 'teButton', 'beButton'].forEach(id => {
+        document.getElementById(id).classList.remove('selected');
+    });
+
+    // Highlight selected button
+    document.getElementById(year.toLowerCase() + 'Button').classList.add('selected');
+    selectedYear = year;
 }
+
+
+// function selectYear(year) {
+//     // Reset button styles
+//     ['feButton', 'seButton', 'teButton', 'beButton'].forEach(id => {
+//         document.getElementById(id).classList.remove('selected');
+//     });
+
+//     // Highlight selected button
+//     document.getElementById(year.toLowerCase() + 'Button').classList.add('selected');
+//     selectedYear = year;
+// }
+
 
 
 
@@ -1187,5 +1198,6 @@ async function updateAndDownloadlab() {
             }
             return true;
         }
+
 
 
