@@ -196,6 +196,18 @@ def get_filtered_dates():
         'TE': 'te',
         'BE': 'be'
     }
+    if year == 'FE':
+        selected_table = 'fe'
+    elif year == 'SE':
+        selected_table = 'se'
+    elif year == 'TE':
+        selected_table = 'te'
+    elif year == 'BE':
+        selected_table = 'be'
+    else:
+        return jsonify({"error": "Invalid Year. Please enter FE, SE, TE, or BE."}), 400
+    
+    tables_to_check = ['general_holidays', selected_table]
 
     selected_table = table_map.get(year)
     if not selected_table:
@@ -504,6 +516,7 @@ def process_document_B():
 if __name__ == '__main__':
    os.makedirs(FILES_DIR, exist_ok=True)
    app.run(debug=True)
+
 
 
 
