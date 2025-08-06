@@ -505,13 +505,15 @@ var dates3 = [];
         try {
             const response = await fetch('/get_filtered_dates', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {
+                    'Content-Type': 'application/json'
+                },
                 body: JSON.stringify({
-                    year: selectedYear,  // send the selected year
-                    //year: document.querySelector('.year-select-btn.active')?.textContent || 'FE',
-                    semiFinalDates: dates
+                    year: selectedYear,
+                    semiFinalDates: formattedDatesArray // should be ['06/08/2025', ...]
                 })
-            });
+            })
+
 
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -578,13 +580,16 @@ var dates3 = [];
     const resultDiv = document.getElementById('result');
     try {
         const response = await fetch('/get_filtered_dates', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                year: document.querySelector('.year-select-btn.active')?.textContent || 'FE',
-                semiFinalDates: dates
-            })
-        });
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+        year: selectedYear,
+        semiFinalDates: formattedDatesArray // should be ['06/08/2025', ...]
+    })
+})
+
         const data = await response.json();
 
         //console.log(`Filtered Dates for ${batchName} (${weekday}):`, data.filteredDates);
@@ -692,16 +697,17 @@ var dates3 = [];
             return;
         }
     
-        fetch("/get_filtered_dates", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                year: selectedYear,
-                semiFinalDates: semiFinalDates // Send semi-final dates to the server
-            })
+        fetch('/get_filtered_dates', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            year: selectedYear,
+            semiFinalDates: formattedDatesArray // should be ['06/08/2025', ...]
         })
+    })
+
         .then(response => {
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -1198,6 +1204,7 @@ async function updateAndDownloadlab() {
             }
             return true;
         }
+
 
 
 
