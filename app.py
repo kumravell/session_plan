@@ -164,7 +164,6 @@ def delete_holiday():
         return jsonify({"error": str(e)}), 500
     
 from datetime import datetime
-
 @app.route('/get_filtered_dates', methods=['POST'])
 def get_filtered_dates():
     data = request.get_json()
@@ -182,7 +181,7 @@ def get_filtered_dates():
         except ValueError:
             continue
 
-    # Check individual tables for each year
+    # Select correct table based on year
     if year == 'FE':
         tables_to_check = ['general_holidays', 'fe']
     elif year == 'SE':
@@ -192,7 +191,7 @@ def get_filtered_dates():
     elif year == 'BE':
         tables_to_check = ['general_holidays', 'be']
     else:
-        return jsonify({"error": "Invalid Year. Please enter FE, SE, TE, or BE."}), 400
+        return jsonify({"error": "Invalid year"}), 400
 
     existing_holidays = set()
 
@@ -217,12 +216,12 @@ def get_filtered_dates():
         return jsonify({"error": str(err)}), 500
 
 
+# @app.route('/get_filtered_dates', methods=['POST'])
 # def get_filtered_dates():
 #     data = request.get_json()
 #     year = data.get('year')
 #     semi_final_dates = data.get('semiFinalDates', [])
 
-#     # ✅ Avoid empty tuple in SQL
 #     if not semi_final_dates:
 #         return jsonify({"filteredDates": []})
 
@@ -234,11 +233,15 @@ def get_filtered_dates():
 #         except ValueError:
 #             continue
 
-#     tables_to_check = []
-#     if year in ['SE', 'TE', 'BE']:
-#         tables_to_check = ['general_holidays', 'se_te_be']
-#     elif year == 'FE':
+#     # Check individual tables for each year
+#     if year == 'FE':
 #         tables_to_check = ['general_holidays', 'fe']
+#     elif year == 'SE':
+#         tables_to_check = ['general_holidays', 'se']
+#     elif year == 'TE':
+#         tables_to_check = ['general_holidays', 'te']
+#     elif year == 'BE':
+#         tables_to_check = ['general_holidays', 'be']
 #     else:
 #         return jsonify({"error": "Invalid Year. Please enter FE, SE, TE, or BE."}), 400
 
@@ -249,7 +252,7 @@ def get_filtered_dates():
 #         cursor = connection.cursor()
 
 #         for table in tables_to_check:
-#             if semi_final_dates_converted:  # ✅ double check here too
+#             if semi_final_dates_converted:
 #                 query = f"SELECT dates FROM {table} WHERE dates IN %s"
 #                 cursor.execute(query, (tuple(semi_final_dates_converted),))
 #                 rows = cursor.fetchall()
@@ -489,4 +492,5 @@ def process_document_B():
 if __name__ == '__main__':
    os.makedirs(FILES_DIR, exist_ok=True)
    app.run(debug=True)
+
 
