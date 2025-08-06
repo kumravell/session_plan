@@ -690,55 +690,49 @@ var dates3 = [];
             resultContainer.innerHTML = "<p>Error: 'Start' date should be before or equal to 'End' date.</p>";
         }
     }
-    
     function fetchAndFilterDatabaseDates(semiFinalDates) {
-        if (!selectedYear) {
-            alert("Please select a year by clicking one of the buttons.");
-            return;
-        }
-    
-        fetch('/get_filtered_dates', {
+    if (!selectedYear) {
+        alert("Please select a year by clicking one of the buttons.");
+        return;
+    }
+
+    fetch('/get_filtered_dates', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
         },
         body: JSON.stringify({
             year: selectedYear,
-            semiFinalDates: formattedDatesArray // should be ['06/08/2025', ...]
+            semiFinalDates: semiFinalDates // ✅ FIXED: use the passed parameter directly
         })
     })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
+    })
+    .then(data => {
+        let resultDiv = document.getElementById("result");
+        resultDiv.innerHTML += "<h4><b>Available Dates</b></h4>"; // Append to existing result
 
-        .then(response => {
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-            return response.json();
-        })
-        .then(data => {
-            // console.log("Received filtered dates:", data.filteredDates);  
-            // Debugging output
-    
-            let resultDiv = document.getElementById("result");
-            resultDiv.innerHTML += "<h4><b>Available Dates</b></h4>"; // Append to existing result
-    
-            if (data.filteredDates.length === 0) {
-                resultDiv.innerHTML += "<p><b>No available dates.</b></p>";
-            } else {
-                // Filter out the dates that are in the semi-final dates
-                const filteredDates = data.filteredDates.filter(date => !semiFinalDates.includes(date));
-    
-                let list = "<ul>";
-                filteredDates.forEach(date => {
-                    let formattedDate = formatDate(date);  // Convert to dd-mm-yyyy
-                    list += `<li>${formattedDate}</li>`;
-                });
-                list += "</ul>";
-                resultDiv.innerHTML += list;
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-    
+        if (data.filteredDates.length === 0) {
+            resultDiv.innerHTML += "<p><b>No available dates.</b></p>";
+        } else {
+            const filteredDates = data.filteredDates.filter(date => !semiFinalDates.includes(date));
+
+            let list = "<ul>";
+            filteredDates.forEach(date => {
+                let formattedDate = formatDate(date);  // Convert to dd-mm-yyyy
+                list += `<li>${formattedDate}</li>`;
+            });
+            list += "</ul>";
+            resultDiv.innerHTML += list;
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+
     
 
 // Helper function to get batch-wise dates
